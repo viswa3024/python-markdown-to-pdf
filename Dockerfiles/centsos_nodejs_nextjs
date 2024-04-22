@@ -1,0 +1,68 @@
+# Start with CentOS-based image
+FROM centos:7
+
+# Add EPEL repository for additional packages
+RUN yum install -y epel-release
+
+# Install Node.js 18
+RUN curl -sL https://rpm.nodesource.com/setup_18.x | bash - && \
+    yum install -y nodejs
+
+# Install required packages for Puppeteer and Next.js
+RUN yum install -y \
+    gconf-service \
+    libasound2 \
+    libatk1.0-0 \
+    libc6 \
+    libcairo2 \
+    libcups2 \
+    libdbus-1-3 \
+    libexpat1 \
+    libfontconfig1 \
+    libgcc1 \
+    libgconf-2-4 \
+    libgdk-pixbuf2.0-0 \
+    libglib2.0-0 \
+    libgtk-3-0 \
+    libnspr4 \
+    libpango-1.0-0 \
+    libpangocairo-1.0-0 \
+    libstdc++6 \
+    libx11-6 \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxext6 \
+    libxfixes3 \
+    libxi6 \
+    libxrandr2 \
+    libxrender1 \
+    libxss1 \
+    libxtst6 \
+    ca-certificates \
+    fonts-liberation \
+    libappindicator1 \
+    libnss3 \
+    lsb-release \
+    xdg-utils \
+    wget \
+    libgbm-dev \
+    libnss3-dev
+
+# Set working directory
+WORKDIR /app
+
+# Clone the Next.js project from GitHub
+RUN yum install -y git && \
+    git clone <repository_url> .
+
+# Install project dependencies
+RUN npm install
+
+# Expose the development port
+EXPOSE 3000
+
+# Command to run in development mode
+CMD ["npm", "run", "dev"]

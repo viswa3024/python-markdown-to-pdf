@@ -1,0 +1,44 @@
+# Use a lightweight Node.js base image
+FROM node:18-alpine
+
+# Set the working directory
+WORKDIR /app
+
+# Copy package files and install dependencies
+COPY package.json package-lock.json ./
+RUN npm ci  # Use `npm ci` for production to ensure consistent installs
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the Next.js project for production
+RUN npm run build
+
+# Expose the production port
+EXPOSE 3000
+
+# Set environment variables (example: production mode)
+ENV NODE_ENV=production
+
+# Start the Next.js server
+CMD ["npm", "start"]
+
+
+
+docker run -p 8080:3000 \
+  -e NEXT_PUBLIC_API_URL="https://api.example.com" \
+  -e DATABASE_URL="postgresql://user:password@host:port/dbname" \
+  -e NODE_ENV=production \
+  nextjs-prod
+
+
+
+  docker build -t nextjs-prod .
+
+
+
+  docker run -p 8080:3000 \
+  -e NEXT_PUBLIC_API_URL="https://api.example.com" \
+  -e DATABASE_URL="postgresql://user:password@host:port/dbname" \
+  -e NODE_ENV=production \
+  nextjs-prod
